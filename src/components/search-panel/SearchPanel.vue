@@ -1,15 +1,33 @@
 <template>
     <div>
-        <input type="text" class="form-control search-input" placeholder="Kinolarni qidirish">
+        <input 
+            type="text" 
+            class="form-control search-input" 
+            placeholder="Kinolarni qidirish"
+            v-on:input="changeTermHandler"
+            v-bind:value="term"
+        >
     </div>
 </template>
 
 <script>
     export default {
         name: 'search-panel',
+        props: {
+            updateTermHandler: {
+                type: Function,
+                required: true
+            }
+        },
         data() {
             return {
-                
+                term: ''
+            }
+        },
+        methods: {
+            changeTermHandler(event) {
+                this.term = event.target.value
+                this.updateTermHandler(this.term)
             }
         }
     }

@@ -1,6 +1,12 @@
 <template>
     <ul class="movie-list list-group">
-        <movie-list-item v-for="movie in movies" :key="movie.id" v-bind:movie="movie"/>
+        <movie-list-item 
+            v-for="movie in movies" 
+            :key="movie.id" 
+            v-bind:movie="movie"
+            @onToggle="$emit('onToggle', $event)"
+            @onDelete="$emit('onDelete', movie.id)"
+        />
     </ul>
 </template>
 
@@ -10,11 +16,6 @@ import MovieListItem from '@/components/movie-list-item/MovieListItem.vue'
         name: 'movie-list',
         components: { 
             MovieListItem
-        },
-        data() {
-            return {
-                
-            }
         },
         props: {
             movies: {

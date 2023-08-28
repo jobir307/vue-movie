@@ -28,15 +28,16 @@
         return {
             movie: {
               name: "",
-              viewers: 0
+              viewers: ""
             }
         }
       },
       methods: {
         addMovie(e) {
-          e.preventDefault();
+          e.preventDefault()
+          if (!this.movie.name || !this.movie.viewers) return
           let newMovie = {
-            id: 4,
+            id: Date.now(),
             name: this.movie.name,
             viewers: this.movie.viewers,
             favourite: false,

@@ -1,12 +1,12 @@
 <template>
     <div class="list-group-item d-flex justify-content-between" v-bind:class="[{like: movie.like}, {favourite: movie.favourite}]">
-        <span class="list-group-item-label">{{ movie.name }}</span>
+        <span class="list-group-item-label" v-on:click="$emit('onToggle', {id: movie.id, prop: 'like'})">{{ movie.name }}</span>
         <input type="number" class="list-group-item-input" v-bind:value="movie.viewers">
         <div class="d-flex justify-content-center align-items-center">
-            <button type="button" class="btn btn-cookie btn-sm">
+            <button type="button" class="btn btn-cookie btn-sm" v-on:click="$emit('onToggle', {id: movie.id, prop: 'favourite'})">
                 <i class="fas fa-cookie"></i>
             </button>
-            <button type="button" class="btn btn-trash btn-sm">
+            <button type="button" class="btn btn-trash btn-sm" v-on:click="$emit('onDelete', movie.id )">
                 <i class="fas fa-trash"></i>
             </button>
             <i class="fas fa-star"></i>
@@ -17,11 +17,6 @@
 <script>
     export default {
         name: 'movie-list-item',
-        data() {
-            return {
-                
-            }
-        },
         props: {
             movie: {
                 type: Object,

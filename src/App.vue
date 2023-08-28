@@ -6,10 +6,14 @@
         v-bind:favouriteMoviesCount="movies.filter(m => m.favourite).length"  
       />
       <div class="search-panel">
-        <search-panel />
-        <app-filter />
+        <search-panel v-bind:updateTermHandler="updateTermHandler"/>
+        <app-filter v-bind:updateFilterHandler="updateFilterHandler"/>
       </div>
-      <movie-list v-bind:movies="movies"/>
+      <movie-list 
+        v-bind:movies="onFilterHandler(onSearchHandler(movies, term), filter)"
+        v-on:onToggle="onToggleHandler"
+        v-on:onDelete="onDeleteHandler"
+      />
       <movie-add-form @createMovie="createMovie"/>
     </div>
   </div>
@@ -50,16 +54,61 @@
             {
               id: 3,
               name: "Ertugrul",
-              viewers: 940,
+              viewers: 440,
               favourite: true,
               like:true
             }
-        ]
+        ],
+        term: "",
+        filter: "all"
       }
     },
     methods: {
       createMovie(item) {
         this.movies.push(item)
+      },
+
+      onToggleHandler({id, prop}) {
+        this.movies = this.movies.map(item => {
+          if (item.id == id) {
+            return {...item, [prop]: !item[prop]}
+          }
+          return item
+        })
+      },
+
+      onDeleteHandler(id) {
+        console.log(id);
+        this.movies = this.movies.filter(c => c.id !== id)
+      },
+
+      onSearchHandler(arr, term) {
+        if (term.length == 0) {
+          return arr
+        }
+        return arr.filter(c => c.name.toLowerCase().indexOf(term) > -1)
+      },
+
+      onFilterHandler(arr, filter) {
+        switch (filter) {
+          case "popular":
+            return arr.filter(c => c.like)
+            break;
+          case "mostViewers":
+            return arr.filter(c => c.viewers >= 500)
+            break;
+          default:
+            return arr;
+            break;
+        }
+      },
+       
+      updateFilterHandler(filter) {
+        this.filter = filter
+      },
+
+      updateTermHandler(term) {
+        this.term = term
       }
     }
   }
